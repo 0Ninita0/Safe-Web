@@ -11,10 +11,9 @@ public class DropDowns : MonoBehaviour
     [SerializeField] public List<TMP_Dropdown> listaDropdowns;
     [SerializeField] public List<string> Orderwords;
 
-    public int X = 0;
+    public bool hasWon;
 
-    public int Win = 0;
-
+    public GameObject Enviar;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -24,28 +23,36 @@ public class DropDowns : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (TMP_Dropdown dd in listaDropdowns)
+        if(hasWon) return;
+
+        int correct = 0;
+
+        for (int i = 0; i < listaDropdowns.Count; i++)
         {
+
+            string selected = listaDropdowns[i].options[listaDropdowns[i].value].text;
             
-            int selectedIndex = listaDropdowns[X].value;
-            if (listaDropdowns[X].options[selectedIndex].text == Orderwords[X])
+            if(selected == Orderwords[i])
             {
-                Win++;
+                correct++;
+            }
+            
+            if (correct == listaDropdowns.Count)
+            {
+                hasWon = true;
+
+                Color ImgCor = Enviar.GetComponent<Image>().color;
+                ImgCor.a = 1f;
+                Enviar.GetComponent<Image>().color = ImgCor;
+
+                Color TxtCor = Enviar.GetComponentInChildren<TMP_Text>().color;
+                TxtCor.a = 1f;
+                Enviar.GetComponentInChildren<TMP_Text>().color = TxtCor;
+
+                Enviar.GetComponent<Button>().enabled = true;
             }
 
-            if (X > 2)
-            {
-                if (Win == 3)
-                {
-                    Debug.Log("WIN");
-                }
-                else { Win = 0;}
 
-                X = 0;
-
-            }
-            else { X++; }
-            
         }
     }
 
