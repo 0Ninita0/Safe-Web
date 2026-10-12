@@ -9,14 +9,18 @@ public class Timers : MonoBehaviour
     [Header("Phase")]
     [SerializeField] private float Phase;
 
+    [SerializeField] private bool Chat;
+
     [Header("Notif GameObjects")]
     [SerializeField] private GameObject NotifEmail;
     [SerializeField] private GameObject NotifChat;
+    [SerializeField] private GameObject EmailDesafio;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         RTime = StartTime;
+        Chat = false;
         Phase = 1;
     }
 
@@ -24,7 +28,7 @@ public class Timers : MonoBehaviour
     void Update()
     {
         if (RTime > 0) { RTime -= Time.deltaTime; }
-        else 
+        else
         {
             switch (Phase)
             {
@@ -34,6 +38,8 @@ public class Timers : MonoBehaviour
 
                 case 2:
                     NotifEmail.gameObject.SetActive(true);
+                    EmailDesafio.gameObject.SetActive(true);
+                    Chat = true;
                     break;
 
                 default:
@@ -44,13 +50,20 @@ public class Timers : MonoBehaviour
 
     public void OpenChat()
     {
-        NotifChat.gameObject.SetActive(false);
-        Phase = 2;
-        RTime = StartTime;
+        if (Chat == false)
+        {
+            NotifChat.gameObject.SetActive(false);
+            RTime = StartTime;
+            Phase = 2;
+        }
     }
     public void OpenEmail()
     {
-        NotifEmail.gameObject.SetActive(false);
-        Phase = 3;
+        if (Chat)
+        {
+            NotifEmail.gameObject.SetActive(false);
+            EmailDesafio.gameObject.SetActive(true);
+            Phase = 3;
+        }
     }
 }
